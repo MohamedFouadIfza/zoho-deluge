@@ -1,0 +1,30 @@
+attachmentss = invokeurl
+[
+	url :"https://www.zohoapis.eu/crm/v6/Deals/" + id.toString() + "/Attachments?fields=id,Owner,File_Name,Created_Time,Parent_Id"
+	type :GET
+	connection:"cvt"
+];
+
+attachmentId =  attachmentss.get("data").get(0).get("id");
+
+attachmentFile = invokeurl
+[
+	url: "https://www.zohoapis.eu/crm/v6/Deals/"+ id.toString() +"/Attachments/" + attachmentId
+	type: GET
+	connection:"cvt"
+];
+
+	fileName = attachmentFile.getFileName() ;
+	attachmentFile.setParamName("myFile");
+	url = "http://ifzaappgw.westus.cloudapp.azure.com/mrz/getPassportDetails";
+	payload = map();
+	payload.put(fileName, attachmentFile);
+
+	passportveilds = invokeUrl
+		[ 
+		 url: url
+		 type: POST 
+		 parameters: payload 
+		];
+
+	passport = passportveilds.get("data");
